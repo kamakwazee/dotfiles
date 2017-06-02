@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+image_file=/tmp/screen_lock.png
+resolution=$(xdpyinfo | grep dimensions | awk '{print $2}')
+#filters='noise=alls=10,scale=iw*.05:-1,scale=iw*20:-1:flags=neighbor' 
+ffmpeg -y -loglevel 0 -s "$resolution" -f x11grab -i $DISPLAY "$image_file"
+#i3lock -n -i "$image_file" 
+python2 randomizePixelChunks.py "$image_file" "$image_file" 100
+i3lock -n -i "$image_file"
