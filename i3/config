@@ -11,7 +11,65 @@
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
+#
+exec compton -CGb
 font pango:monospace 8
+
+for_window [class="^.*"] border pixel 1
+
+#smart_gaps on
+
+
+
+gaps inner 30
+gaps outer 15
+
+set $mode_gaps Gaps: (o) outer, (i) inner, (f) ull, (d) efault
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym Mod1+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+    bindsym o	mode "$mode_gaps_outer"
+    bindsym i   mode "$mode_gaps_inner"
+    
+    bindsym f   gaps inner current set 0, gaps outer current set 0
+    bindsym d   gaps outer current set 15, gaps inner current set 30
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_inner" {
+    bindsym plus  gaps inner current plus  5
+    bindsym minus gaps inner current minus 5
+    bindsym 0	  gaps inner current set 0
+    
+    bindsym Shift+plus gaps inner all plus 5
+    bindsym Shift+minus gaps inner all minus 5
+    bindsym Shift+0 gaps inner all set 0
+    
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_outer" {
+
+    bindsym plus  gaps outer current plus  5
+    bindsym minus gaps outer current minus 5
+    bindsym 0	  gaps outer current set 0
+    
+    bindsym Shift+plus gaps outer all plus 5
+    bindsym Shift+minus gaps outer all minus 5
+    bindsym Shift+0 gaps outer all set 0
+    
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+
+
+}
+
+workspace_auto_back_and_forth no
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -26,22 +84,22 @@ font pango:monospace 8
 
 # use these keys for focus, movement, and resize directions when reaching for
 # the arrows is not convenient
-set $up l
-set $down k
+set $up k
+set $down l
 set $left j
-set $right semicolon
+set $right semicolon 
 
 # use Mouse+Mod1 to drag floating windows to their wanted position
 floating_modifier Mod1
 
 # start a terminal
-bindsym Mod1+Return exec i3-sensible-terminal
+bindsym Mod1+Return exec termite
 
 # kill focused window
 bindsym Mod1+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym Mod1+d exec dmenu_run
+bindsym Mod1+d exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -show run'
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -105,16 +163,11 @@ bindsym Mod1+Shift+minus move scratchpad
 bindsym Mod1+minus scratchpad show
 
 # switch to workspace
-bindsym Mod1+1 workspace 1
-bindsym Mod1+2 workspace 2
-bindsym Mod1+3 workspace 3
-bindsym Mod1+4 workspace 4
-bindsym Mod1+5 workspace 5
-bindsym Mod1+6 workspace 6
-bindsym Mod1+7 workspace 7
-bindsym Mod1+8 workspace 8
-bindsym Mod1+9 workspace 9
-bindsym Mod1+0 workspace 10
+bindsym Mod1+1 workspace 2; workspace 1
+bindsym Mod1+2 workspace 4; workspace 3
+bindsym Mod1+3 workspace 6; workspace 5
+bindsym Mod1+4 workspace 8; workspace 7
+bindsym Mod1+5 workspace 10; workspace 9
 
 # move focused container to workspace
 bindsym Mod1+Shift+1 move container to workspace 1
@@ -167,35 +220,40 @@ mode "resize" {
 
 bindsym Mod1+r mode "resize"
 
+workspace 1 output HDMI-1
+workspace 2 output DVI-I-1
+
+workspace 3 output HDMI-1
+workspace 4 output DVI-I-1
+
+workspace 5 output HDMI-1
+workspace 6 output DVI-I-1
+
+workspace 7 output HDMI-1
+workspace 8 output DVI-I-1
+
+workspace 9 output HDMI-1
+workspace 10 output DVI-I-1
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
   status_command i3status
-  colors {
-    separator #dc322f
-    background #002b36
-    statusline #268bd2
-    focused_workspace #fdf6e3 #859900 #fdf6e3
-    active_workspace #fdf6e3 #6c71c4 #fdf6e3
-    inactive_workspace #586e75 #93a1a1 #002b36
-    urgent_workspace #d33682 #d33682 #fdf6e3
-  }
+  #colors {
+  #  separator #dc322f
+  #  background #002b36
+  #  statusline #268bd2
+  #  focused_workspace #fdf6e3 #859900 #fdf6e3
+  #  active_workspace #fdf6e3 #6c71c4 #fdf6e3
+  #  inactive_workspace #586e75 #93a1a1 #002b36
+  #  urgent_workspace #d33682 #d33682 #fdf6e3
+  #}
 }
 
 exec --no-startup-id feh --bg-scale ~/Wallpapers/fsociety_bg.jpg
 exec --no-startup-id lock
-#######################################################################
-# automatically start i3-config-wizard to offer the user to create a
-# keysym-based config which used their favorite modifier (alt or windows)
-#
-# i3-config-wizard will not launch if there already is a config file
-# in ~/.i3/config.
-#
-# Please remove the following exec line:
-#######################################################################
-exec i3-config-wizard
 
-client.focused #859900 #859900 #fdf6e3 #6c71c4
-client.focused_inactive #073642 #073642 #eee8d5 #6c71c4
-client.unfocused #073642 #073642 #93a1a1 #586e75
-client.urgent #d33682 #d33682 #fdf6e3 #dc322f
+#client.focused #859900 #859900 #fdf6e3 #6c71c4
+#client.focused_inactive #073642 #073642 #eee8d5 #6c71c4
+#client.unfocused #073642 #073642 #93a1a1 #586e75
+#client.urgent #d33682 #d33682 #fdf6e3 #dc322f
